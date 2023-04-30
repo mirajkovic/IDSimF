@@ -8,6 +8,9 @@ stages:          # List of stages for jobs, and their order of execution
 before_script:
  - apt-get update --yes
  - apt-get install --yes cmake
+ - apt-get -y install hdf5-tools 
+ - apt-get -y install h5utils 
+ - apt-get -y install libhdf5-dev 
  
 build-job:       # This job runs in the build stage, which runs first.
   stage: build

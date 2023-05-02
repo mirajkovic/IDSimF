@@ -1,17 +1,18 @@
 image: gcc
+  
 
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
-
-before_script:
- - apt-get update --yes
- - apt-get install --yes cmake
- - apt-get -y install hdf5-tools 
- - apt-get -y install h5utils 
- - apt-get -y install libhdf5-dev 
  
+before_script:
+  - apt-get update --yes
+  - apt-get install --yes cmake
+  - apt-get -y install hdf5-tools 
+  - apt-get -y install h5utils 
+  - apt-get -y install libhdf5-dev 
+  
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
@@ -20,11 +21,15 @@ build-job:       # This job runs in the build stage, which runs first.
     - cd build
     - cmake ..
     - make -j8
+  artifacts:
+    paths:
+      - build/
 
 test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
-    - ctest --repeat until-pass:10 .
+    - cd build
+    - ctest --repeat until-pass:10 --rerun-failed --output-on-failure
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
@@ -32,3 +37,4 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+

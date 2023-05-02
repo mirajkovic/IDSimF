@@ -12,6 +12,7 @@ before_script:
   - apt-get -y install hdf5-tools 
   - apt-get -y install h5utils 
   - apt-get -y install libhdf5-dev 
+ 
   
 #build-job:       # This job runs in the build stage, which runs first.
   #stage: build
@@ -35,6 +36,10 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
   script:
-    - echo "Deploying application..."
+    - apt-get -y install docker.io
+    - cd docker
+    - docker login -u $DOCKER_USER -p DOCKER_ACCESS_TOKEN
+    - docker build -t $DOCKER_USER/idsimf-cli .
+    - docker push mrajkovic/idsimf-cli:latest
     - echo "Application successfully deployed."
 

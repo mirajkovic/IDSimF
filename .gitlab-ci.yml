@@ -1,5 +1,7 @@
 image: gcc
-  
+
+services:
+  - docker:dind
 
 stages:          # List of stages for jobs, and their order of execution
   #- build
@@ -36,7 +38,7 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
   script:
-    - apt-get -y install docker.io
+    #- apt-get -y install docker.io
     - cd docker
     - docker login -u $DOCKER_USER -p $DOCKER_ACCESS_TOKEN
     - docker build -t $DOCKER_USER/idsimf-cli .

@@ -21,7 +21,7 @@ build-job:
     - cd build
     - cmake ..
     - make -j8
- #artifacts:
+  artifacts:
     paths:
       - build/
 
